@@ -20,28 +20,48 @@ const App = () => {
   const per_page = 12;
 
   useEffect(() => {
+    const getImages = async (searchQuery, page) => {
+      if (!searchQuery) {
+        return;
+      }
+      setIsLoading(true);
+  
+      try {
+        const { hits, totalHits } = await fetchImages(searchQuery, page);
+        if (hits.length === 0) {
+          return alert('Sorry, nothing found 🤷‍♂️');
+        }
+        setImages(prevImages => [...prevImages, ...hits]);
+        setLoadMore(page < Math.ceil(totalHits / per_page));
+      } catch (error) {
+        setError({ error });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
     getImages(searchQuery, page);
   }, [searchQuery, page]);
 
-  const getImages = async (searchQuery, page) => {
-    if (!searchQuery) {
-      return;
-    }
-    setIsLoading(true);
+  // const getImages = async (searchQuery, page) => {
+  //   if (!searchQuery) {
+  //     return;
+  //   }
+  //   setIsLoading(true);
 
-    try {
-      const { hits, totalHits } = await fetchImages(searchQuery, page);
-      if (hits.length === 0) {
-        return alert('Sorry, nothing found 🤷‍♂️');
-      }
-      setImages(prevImages => [...prevImages, ...hits]);
-      setLoadMore(page < Math.ceil(totalHits / per_page));
-    } catch (error) {
-      setError({ error });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //   try {
+  //     const { hits, totalHits } = await fetchImages(searchQuery, page);
+  //     if (hits.length === 0) {
+  //       return alert('Sorry, nothing found 🤷‍♂️');
+  //     }
+  //     setImages(prevImages => [...prevImages, ...hits]);
+  //     setLoadMore(page < Math.ceil(totalHits / per_page));
+  //   } catch (error) {
+  //     setError({ error });
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const formSubmit = searchQuery => {
     setSearchQuery(searchQuery);

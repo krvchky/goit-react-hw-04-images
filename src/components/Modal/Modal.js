@@ -7,6 +7,12 @@ const modalRoot = document.querySelector('#modal-root');
 
 const Modal = ({ largeImageURL, onClose }) => {
 useEffect(() => {
+    const handleKeyDown = evt => {
+        if (evt.code === 'Escape') {
+        onClose();
+        }
+        };
+        
 window.addEventListener('keydown', handleKeyDown);
 
 return () => {
@@ -14,11 +20,11 @@ window.removeEventListener('keydown', handleKeyDown);
 };
 });
 
-const handleKeyDown = evt => {
-if (evt.code === 'Escape') {
-onClose();
-}
-};
+// const handleKeyDown = evt => {
+// if (evt.code === 'Escape') {
+// onClose();
+// }
+// };
 
 const handleBackDropClick = evt => {
 if (evt.currentTarget === evt.target) {
